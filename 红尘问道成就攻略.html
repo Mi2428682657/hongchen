@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>红尘问道 · 成就攻略</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%23141620'/%3E%3Ctext x='12' y='17' font-size='14' text-anchor='middle' fill='%23c9a35c' font-family='serif'%3E道%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#14161f;
+    --bg2:#1b1e2a;
+    --card:#20243a;
+    --card2:#262b44;
+    --ink:#e8e3d5;
+    --ink-dim:#a9a7b8;
+    --gold:#c9a35c;
+    --gold-deep:#a8833f;
+    --line:rgba(201,163,92,.22);
+    --ok:#7fb069;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:radial-gradient(1200px 600px at 50% -100px, rgba(201,163,92,.09), transparent 60%), var(--bg);
+    color:var(--ink);
+    font-family:"Noto Serif SC","Source Han Serif SC","Songti SC",SimSun,serif;
+    min-height:100vh;
+    line-height:1.6;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 16px 80px}
+
+  /* ===== 头部 ===== */
+  header{
+    text-align:center;
+    padding:34px 12px 26px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:22px;
+  }
+  h1{
+    font-size:clamp(28px,5vw,44px);
+    letter-spacing:.12em;
+    color:var(--gold);
+    font-weight:700;
+    text-shadow:0 0 24px rgba(201,163,92,.25);
+  }
+  .sub{
+    margin-top:10px;color:var(--ink-dim);font-size:14px;letter-spacing:.08em;
+  }
+  .stats{
+    display:flex;justify-content:center;gap:28px;margin-top:16px;flex-wrap:wrap;
+  }
+  .stats div{font-size:13px;color:var(--ink-dim)}
+  .stats b{display:block;font-size:24px;color:var(--gold);font-weight:700}
+
+  /* ===== 控件区 ===== */
+  .controls{
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+    margin:18px 0 14px;
+  }
+  input,select{
+    background:var(--bg2);
+    border:1px solid var(--line);
+    color:var(--ink);
+    font-family:inherit;
+    font-size:16px;
+    border-radius:8px;
+    padding:10px 14px;
+    min-height:44px;
+    outline:none;
+  }
+  input:focus,select:focus{border-color:var(--gold)}
+  input{flex:1;min-width:200px}
+  select{flex:0 0 auto}
+  .count{font-size:13px;color:var(--ink-dim);margin-left:auto;white-space:nowrap}
+
+  /* ===== 篇章 Tab ===== */
+  .tabs{
+    display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;
+  }
+  .tab{
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink-dim);
+    font-family:inherit;
+    font-size:15px;
+    padding:10px 16px;
+    min-height:44px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .tab:hover{border-color:var(--gold);color:var(--ink)}
+  .tab.active{
+    background:var(--gold);
+    color:#14161f;
+    border-color:var(--gold);
+    font-weight:700;
+  }
+
+  /* ===== 成就卡片 ===== */
+  .achv{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:3px solid var(--gold);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:12px;
+  }
+  .achv-head{
+    display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+    cursor:pointer;
+    user-select:none;
+  }
+  .achv-idx{
+    font-size:13px;color:var(--gold-deep);
+    letter-spacing:.1em;
+  }
+  .achv-name{
+    font-size:clamp(16px,2.5vw,19px);
+    font-weight:700;letter-spacing:.06em;
+    flex:1;min-width:150px;
+  }
+  .achv-name .tgl{display:inline-block;width:1.2em;color:var(--ink-dim);font-size:12px;letter-spacing:0}
+  .req{
+    display:inline-flex;gap:6px;align-items:center;
+  }
+  .req span{
+    font-size:12px;
+    padding:3px 9px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    color:var(--ink-dim);
+  }
+  .req span b{color:var(--gold);font-weight:700;margin-right:2px}
+  .req span.ji b{color:#7fb0c9}
+
+  /* ===== 步骤链 ===== */
+  .steps{
+    margin-top:12px;
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    border-top:1px dashed var(--line);
+    padding-top:12px;
+  }
+  .step{
+    background:var(--bg2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:5px 11px;
+    font-size:13.5px;
+    color:var(--ink);
+    letter-spacing:.04em;
+  }
+  .step:first-child{border-color:var(--gold);color:var(--gold)}
+  .arrow{color:var(--gold-deep);font-size:13px;user-select:none}
+
+  .empty{
+    text-align:center;color:var(--ink-dim);padding:48px 12px;font-size:15px;
+  }
+
+  footer{
+    text-align:center;color:var(--ink-dim);font-size:12px;margin-top:36px;
+    letter-spacing:.06em;
+  }
+  footer .note{color:var(--ink-dim);font-size:11px;margin-top:4px;opacity:.7}
+
+  @media (max-width:640px){
+    .wrap{padding:16px 10px 60px}
+    header{padding:22px 8px 18px}
+    .achv{padding:12px 12px}
+    .count{margin-left:0;width:100%}
+    .req{margin-left:0}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>红尘问道 · 成就攻略</h1>
+    <p class="sub">五大篇章 · 72 项成就 · 解锁条件速查</p>
+    <div class="stats">
+      <div><b>5</b>篇章</div>
+      <div><b>72</b>成就</div>
+      <div><b>13</b>李自明传</div>
+      <div><b>16</b>凡人修仙记</div>
+      <div><b>14</b>西游前传</div>
+      <div><b>15</b>琼英传</div>
+      <div><b>14</b>封神英杰</div>
+    </div>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="controls">
+    <input id="search" type="search" placeholder="搜索成就名…" aria-label="搜索成就名">
+    <select id="wuFilter" aria-label="按悟性要求筛选">
+      <option value="">悟性不限</option>
+    </select>
+    <div class="count" id="count"></div>
+  </div>
+
+  <div id="list"></div>
+
+  <footer>
+    <div>红尘问道 · 成就解锁指引</div>
+    <div class="note">条件步骤按顺序点击即可达成对应成就</div>
+  </footer>
+
+</div>
+
+<script>
+const DATA = [
+{chapter:"李自明传", items:[
+  {n:1,w:40,j:40,name:"受惊而亡",s:["拂尘","逗猫"]},
+  {n:2,w:40,j:50,name:"王朝覆灭",s:["印章","睡猫","等待","去假山","呼救"]},
+  {n:3,w:50,j:50,name:"福祸难逃",s:["拂尘","睡猫","等待","去假山","文化课","易","大荒流","12只兔","闭门思过","君要臣死","主持修书","走官路","撤回来"]},
+  {n:4,w:50,j:50,name:"遇困而亡",s:["拂尘","睡猫","等待","去假山","文化课","易","大荒流","12只兔","闭门思过","君要臣死","主持修书","走官路","反抗"]},
+  {n:5,w:50,j:50,name:"真假皇子",s:["拂尘","睡猫","爬过去","去假山","文化课","难","入寒窗","250","闭门思过","君要臣死","去北境","走私路","屯田","布陷阱","腰牌"]},
+  {n:6,w:50,j:50,name:"假传圣旨",s:["拂尘","睡猫","爬过去","去假山","文化课","难","入寒窗","250","闭门思过","君要臣死","去北境","走私路","屯田","布陷阱","口谕"]},
+  {n:7,w:60,j:50,name:"功亏一篑",s:["拂尘","睡猫","爬过去","去假山","文化课","难","入寒窗","250","闭门思过","君要臣死","去北境","走私路","屯田","布陷阱","伪装","顺着解释"]},
+  {n:8,w:60,j:50,name:"因果循环",s:["拂尘","睡猫","爬过去","去假山","文化课","难","入寒窗","250","闭门思过","君要臣死","去北境","走私路","屯田","布陷阱","伪装","直言不讳","冷嘲热讽","合作"]},
+  {n:9,w:60,j:50,name:"死得其所",s:["拂尘","睡猫","爬过去","去假山","文化课","难","入寒窗","250","闭门思过","君要臣死","去北境","走私路","屯田","布陷阱","伪装","直言不讳","冷嘲热讽","报仇"]},
+  {n:10,w:70,j:50,name:"是输是赢",s:["锦囊","睡猫","等待","在原地","文化课","难","入寒窗","250","闭门思过","君要臣死","主持修书","走私路","屯田","布陷阱","伪装","直言不讳","冷嘲热讽","委婉拒绝","亲自前往"]},
+  {n:11,w:70,j:50,name:"养虎为患",s:["拂尘","睡猫","爬过去","去假山","文化课","难","入寒窗","250","闭门思过","君要臣死","去北境","走私路","屯田","布陷阱","伪装","直言不讳","冷嘲热讽","委婉拒绝","放他一马","贸易"]},
+  {n:12,w:70,j:50,name:"传说之下",s:["拂尘","睡猫","爬过去","去假山","文化课","难","入寒窗","250","闭门思过","君要臣死","去北境","走私路","屯田","布陷阱","伪装","直言不讳","冷嘲热讽","委婉拒绝","放他一马","远征"]},
+  {n:13,w:130,j:50,name:"后世太平",s:["拂尘","睡猫","等待","去假山","文化课","易","大荒流","12只兔","闭门思过","君要臣死","主持修书","走私路","屯田","布陷阱","伪装","直言不讳","冷嘲热讽","委婉拒绝","放他一马","远征"]}
+]},
+{chapter:"凡人修仙记", items:[
+  {n:1,w:40,name:"夜遇强盗",s:["印章","诗","坐车前往"]},
+  {n:2,w:40,name:"一蹶不振",s:["印章","诗","不去"]},
+  {n:3,w:40,name:"殃及池鱼",s:["印章","诗","骑马","探查"]},
+  {n:4,w:40,name:"魂飞魄散",s:["印章","诗","骑马","休息","回府"]},
+  {n:5,w:50,name:"安稳一生",s:["毛笔","礼","瑜不掩瑕","古者为政","五尺","回家"]},
+  {n:6,w:50,name:"后患",s:["毛笔","礼","瑜不掩瑕","古者为政","五尺","出门"]},
+  {n:7,w:50,name:"魔数",s:["道德经","易","请教高人"]},
+  {n:8,w:50,name:"遗忘之约",s:["道德经","易","学习","等待先生"]},
+  {n:9,w:60,name:"魔魂夺舍",s:["道德经","易","学习","上前测试","留着葫芦"]},
+  {n:10,w:70,name:"无功而返",s:["道德经","易","学习","上前测试","上交","直入"]},
+  {n:11,w:70,name:"散魂",s:["道德经","易","学习","上前测试","上交","伪装","直接饮下"]},
+  {n:12,w:70,name:"意外而亡",s:["道德经","易","学习","上前测试","上交","伪装","动物实验","向右躲闪"]},
+  {n:13,w:60,name:"一无所有",s:["道德经","易","学习","上前测试","上交","伪装","动物实验","弃剑"]},
+  {n:14,w:60,name:"筑基失败",s:["道德经","易","学习","上前测试","上交","伪装","动物实验","向左躲闪","回京都","不选木煞"]},
+  {n:15,w:70,name:"止步不前",s:["道德经","诗","骑马","休息","去贾府","学习","上前测试","上交","伪装","动物实验","向左躲闪","闷头修炼"]},
+  {n:16,w:60,name:"云游天下",s:["道德经","诗","骑马","休息","去贾府","学习","上前测试","上交","伪装","动物实验","向左躲闪","回京都","选木煞"]}
+]},
+{chapter:"西游前传", items:[
+  {n:1,w:40,name:"消极怠工",s:["隐居"]},
+  {n:2,w:40,name:"出口妄言",s:["筋斗云","非也非也"]},
+  {n:3,w:40,name:"马在人在",s:["筋斗云","正是贫僧","刚正面"]},
+  {n:4,w:40,name:"低调做人",s:["筋斗云","正是贫僧","试图避开","拿出异宝"]},
+  {n:5,w:50,name:"不长记性",s:["筋斗云","正是贫僧","试图避开","表示没有"]},
+  {n:6,w:50,name:"不听妖言",s:["筋斗云","正是贫僧","试图避开","继续吹捧","有区别吗","杀青","我是主角"]},
+  {n:7,w:50,name:"是真的狗",s:["筋斗云","正是贫僧","试图避开","继续吹捧","有区别吗","杀青","如何是好","继续追打"]},
+  {n:8,w:50,name:"是真的苟",s:["筋斗云","正是贫僧","试图避开","继续吹捧","有区别吗","杀青","如何是好","使用嘴炮"]},
+  {n:9,w:60,name:"佛光普照",s:["筋斗云","正是贫僧","试图避开","继续吹捧","心甘情愿","想办法","如何是好","使用嘴炮","执意要走"]},
+  {n:10,w:60,name:"不可贪色",s:["筋斗云","正是贫僧","试图避开","继续吹捧","不甘不愿","想办法","如何是好","使用嘴炮","住半年","选女儿"]},
+  {n:11,w:60,name:"不可开荤",s:["筋斗云","正是贫僧","试图避开","继续吹捧","不甘不愿","想办法","如何是好","使用嘴炮","住半年","换一批","吃"]},
+  {n:12,w:60,name:"闻也不行",s:["筋斗云","正是贫僧","试图避开","继续吹捧","不甘不愿","想办法","如何是好","使用嘴炮","住半年","换一批","闻"]},
+  {n:13,w:70,name:"天命难为",s:["筋斗云","正是贫僧","试图避开","继续吹捧","不甘不愿","想办法","如何是好","使用嘴炮","住半年","换一批","赶紧走","不答应"]},
+  {n:14,w:70,name:"游戏彩蛋",s:["筋斗云","正是贫僧","试图避开","继续吹捧","心甘情愿","想办法","如何是好","使用嘴炮","住半年","换一批","赶紧走","答应"]}
+]},
+{chapter:"琼英传", items:[
+  {n:1,w:40,name:"纸堆包火",s:["女扮男装"]},
+  {n:2,w:40,name:"天予不取",s:["还是算了","陪父亲"]},
+  {n:3,w:40,name:"阴差阳错",s:["还是算了","上山","等师兄","请求"]},
+  {n:4,w:40,name:"碌碌无为",s:["还是算了","上山","请教","埋在心底"]},
+  {n:5,w:50,name:"阴风致命",s:["还是算了","上山","请教","请求","不给他"]},
+  {n:6,w:50,name:"人间逍遥",s:["还是算了","上山","请教","请求","给他","问师父","不做声","寄给师兄"]},
+  {n:7,w:50,name:"无可奈何",s:["还是算了","上山","请教","请求","给他","问师父","开口","找师兄","告诉师兄","先行调养"]},
+  {n:8,w:50,name:"走投无路",s:["还是算了","上山","请教","请求","给他","问师父","不做声","找师兄","藏起来","去求救"]},
+  {n:9,w:60,name:"春阳绝脉",s:["还是算了","上山","请教","请求","给他","问师父","不做声","找师兄","藏起来","死磕"]},
+  {n:10,w:60,name:"身中埋伏",s:["还是算了","上山","请教","请求","给他","问师父","反驳","找师兄","藏起来","死磕","进阵眼"]},
+  {n:11,w:60,name:"被困身亡",s:["还是算了","上山","请教","请求","给他","问师父","反驳","找师兄","藏起来","死磕","进门","找阵眼"]},
+  {n:12,w:60,name:"万仙灭绝",s:["还是算了","上山","请教","请求","给他","问师父","反驳","找师兄","藏起来","死磕","进门","合力破阵","继续合力"]},
+  {n:13,w:70,name:"各自前行",s:["还是算了","上山","请教","请求","给他","问师父","反驳","找师兄","藏起来","死磕","进门","合力破阵","寻找阵眼","拒绝过去"]},
+  {n:14,w:70,name:"天道无情",s:["还是算了","上山","请教","请求","给他","问师父","反驳","找师兄","藏起来","死磕","进门","合力破阵","寻找阵眼","过去说话","愿意"]},
+  {n:15,w:70,name:"活在当下",s:["还是算了","上山","请教","请求","给他","问师父","反驳","找师兄","藏起来","死磕","进门","合力破阵","寻找阵眼","过去说话","不愿意"]}
+]},
+{chapter:"封神英杰", items:[
+  {n:1,w:40,name:"错失机缘",s:["不凑热闹"]},
+  {n:2,w:40,name:"天命难改",s:["过去看看","遗憾不懂"]},
+  {n:3,w:40,name:"神识破碎",s:["过去看看","似懂非懂","再看看"]},
+  {n:4,w:40,name:"何为天道",s:["过去看看","似懂非懂","退出","跟师傅说"]},
+  {n:5,w:50,name:"时机未到",s:["过去看看","似懂非懂","退出","三缄其口","解释"]},
+  {n:6,w:50,name:"打草惊蛇",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","截教"]},
+  {n:7,w:60,name:"许是巧合",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","阐教","置之不理","当是巧合"]},
+  {n:8,w:60,name:"接引索命",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","阐教","置之不理","怎会巧合"]},
+  {n:9,w:60,name:"先礼后兵",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","阐教","出手相救","怎会巧合","委婉拒绝"]},
+  {n:10,w:70,name:"谈个鬼啊",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","阐教","出手相救","怎会巧合","愿意加入","出手帮忙","放他一马","谈谈"]},
+  {n:11,w:70,name:"打个球啊",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","阐教","出手相救","怎会巧合","愿意加入","出手帮忙","放他一马","单挑"]},
+  {n:12,w:70,name:"自己作死",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","阐教","出手相救","怎会巧合","愿意加入","出手帮忙","放他一马","挂机","走个过场"]},
+  {n:13,w:70,name:"好个封神",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","阐教","出手相救","怎会巧合","愿意加入","静观其变","送去封神","挂机","不去"]},
+  {n:14,w:80,name:"未来弥新",s:["过去看看","似懂非懂","退出","三缄其口","隐瞒","阐教","出手相救","怎会巧合","愿意加入","出手帮忙","放他一马","挂机","不去"]}
+]}
+];
+
+let cur = 0;
+const tabsEl = document.getElementById("tabs");
+const listEl = document.getElementById("list");
+const searchEl = document.getElementById("search");
+const wuEl = document.getElementById("wuFilter");
+const countEl = document.getElementById("count");
+
+// 悟性筛选选项（全部篇章去重排序）
+const wuSet = new Set();
+DATA.forEach(ch => ch.items.forEach(it => wuSet.add(it.w)));
+[...wuSet].sort((a,b)=>a-b).forEach(w => {
+  const o = document.createElement("option");
+  o.value = w; o.textContent = "悟性 ≥ " + w;
+  wuEl.appendChild(o);
+});
+
+function renderTabs(){
+  tabsEl.innerHTML = "";
+  DATA.forEach((ch,i) => {
+    const b = document.createElement("button");
+    b.className = "tab" + (i===cur?" active":"");
+    b.textContent = ch.chapter;
+    b.setAttribute("aria-pressed", i===cur);
+    b.addEventListener("click", () => { cur = i; renderAll(); });
+    tabsEl.appendChild(b);
+  });
+}
+
+function filterItems(){
+  const q = searchEl.value.trim();
+  const w = wuEl.value ? parseInt(wuEl.value,10) : 0;
+  return DATA[cur].items.filter(it => {
+    if (w && it.w < w) return false;
+    if (q && !it.name.includes(q)) return false;
+    return true;
+  });
+}
+
+function renderAll(){
+  renderTabs();
+  const items = filterItems();
+  countEl.textContent = "当前显示 " + items.length + " / " + DATA[cur].items.length;
+  listEl.innerHTML = "";
+  if (!items.length){
+    listEl.innerHTML = '<div class="empty">没有符合条件的成就，换个筛选试试</div>';
+    return;
+  }
+  items.forEach(it => {
+    const card = document.createElement("div");
+    card.className = "achv closed";
+    const reqW = it.w ? '<span><b>悟</b>' + it.w + '</span>' : '';
+    const reqJ = it.j ? '<span class="ji"><b>缘</b>' + it.j + '</span>' : '';
+    const stepsHtml = it.s.map((st,i) =>
+      (i?'<span class="arrow">→</span>':'') + '<span class="step">'+st+'</span>'
+    ).join("");
+    card.innerHTML =
+      '<div class="achv-head" role="button" tabindex="0" aria-expanded="false">' +
+        '<span class="achv-idx">第' + it.n + '章</span>' +
+        '<span class="achv-name">' + it.name + '<span class="tgl">▾</span></span>' +
+        '<span class="req">' + reqW + reqJ + '</span>' +
+      '</div>' +
+      '<div class="steps">' + stepsHtml + '</div>';
+    const head = card.querySelector(".achv-head");
+    const toggle = () => {
+      const open = card.classList.toggle("open");
+      card.classList.toggle("closed", !open);
+      head.setAttribute("aria-expanded", open);
+      card.querySelector(".tgl").textContent = open ? "▾" : "▸";
+    };
+    head.addEventListener("click", toggle);
+    head.addEventListener("keydown", e => { if (e.key==="Enter"||e.key===" ") { e.preventDefault(); toggle(); } });
+    listEl.appendChild(card);
+  });
+}
+
+searchEl.addEventListener("input", renderAll);
+wuEl.addEventListener("change", renderAll);
+renderAll();
+</script>
+</body>
+</html>
